@@ -52,7 +52,7 @@ public class ParentRegistration extends AppCompatActivity {
                 String phone = Objects.requireNonNull(binding.phoneField.getText()).toString().trim();
                 String password = Objects.requireNonNull(binding.passwordField.getText()).toString().trim();
                 String repeatPassword = Objects.requireNonNull(binding.repeatPasswordField.getText()).toString().trim();
-                String adress = Objects.requireNonNull(binding.adressField.getText()).toString().trim();
+                String address = Objects.requireNonNull(binding.addressField.getText()).toString().trim();
                 String num_of_children = Objects.requireNonNull(binding.numOfChildrenField.getText()).toString().trim();
                 //First name error
                 if (firstName.equals("")) {
@@ -90,8 +90,8 @@ public class ParentRegistration extends AppCompatActivity {
                     binding.repeatPasswordField.setError("Passwords doesn't match");
                     binding.repeatPasswordField.setText("");
                     Toast.makeText(getApplicationContext(), "Some fields are incorrect or missing", Toast.LENGTH_SHORT).show();
-                } else if (adress.equals("")) {
-                    binding.adressField.setError("Enter your adress");
+                } else if (address.equals("")) {
+                    binding.addressField.setError("Enter your address");
                     Toast.makeText(getApplicationContext(), "Some fields are incorrect or missing", Toast.LENGTH_SHORT).show();
                 } else if (num_of_children.equals("")) {
                     binding.numOfChildrenField.setError("Enter number of childen");
@@ -118,7 +118,7 @@ public class ParentRegistration extends AppCompatActivity {
         binding.phoneField.setText("");
         binding.passwordField.setText("");
         binding.repeatPasswordField.setText("");
-        binding.adressField.setText("");
+        binding.addressField.setText("");
         binding.numOfChildrenField.setText("");
 
 
