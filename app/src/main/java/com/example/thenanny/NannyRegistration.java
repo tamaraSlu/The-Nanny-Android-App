@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 public class NannyRegistration extends AppCompatActivity {
     private NannyRegistrationFormBinding binding;
@@ -37,6 +38,7 @@ public class NannyRegistration extends AppCompatActivity {
         setContentView(view);
 
         //Date picker
+        //TODO: what if there are two date pickers?
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
@@ -63,19 +65,34 @@ public class NannyRegistration extends AppCompatActivity {
             return false;
         });
 
+        binding.StartWorkDateField.setOnTouchListener((v, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                binding.StartWorkDateField.setShowSoftInputOnFocus(false);
+
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+                new DatePickerDialog(NannyRegistration.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+            return false;
+        });
+
 
 
 
         binding.nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String firstName= binding.firstNameField.getText().toString().trim();
-                String lastName= binding.lastNameField.getText().toString().trim();
-                String email= binding.emailField.getText().toString().trim();
-                String phone= binding.phoneField.getText().toString().trim();
-                String date_of_birth= binding.birthDateField.getText().toString().trim();
-                String password= binding.passwordField.getText().toString().trim();
-                String repeatPassword= binding.repeatPasswordField.getText().toString().trim();
+                String firstName= Objects.requireNonNull(binding.firstNameField.getText()).toString().trim();
+                String lastName= Objects.requireNonNull(binding.lastNameField.getText()).toString().trim();
+                String email= Objects.requireNonNull(binding.emailField.getText()).toString().trim();
+                String phone= Objects.requireNonNull(binding.phoneField.getText()).toString().trim();
+                String date_of_birth= Objects.requireNonNull(binding.birthDateField.getText()).toString().trim();
+                String start_work_date= Objects.requireNonNull(binding.StartWorkDateField.getText()).toString().trim();
+                String password= Objects.requireNonNull(binding.passwordField.getText()).toString().trim();
+                String repeatPassword= Objects.requireNonNull(binding.repeatPasswordField.getText()).toString().trim();
 
 
                 //First name error
@@ -103,6 +120,11 @@ public class NannyRegistration extends AppCompatActivity {
                 {
                     binding.birthDateField.setError("This app is for adults only");
                     binding.birthDateField.setText("");
+                    Toast.makeText(getApplicationContext(), "Some fields are incorrect or missing", Toast.LENGTH_SHORT).show();
+                }
+                //start work date error
+                else if(start_work_date.length()<1) {
+                    binding.StartWorkDateField.setError("Enter Date of Birth");
                     Toast.makeText(getApplicationContext(), "Some fields are incorrect or missing", Toast.LENGTH_SHORT).show();
                 }
                 //EmailAddress error
@@ -156,6 +178,7 @@ public class NannyRegistration extends AppCompatActivity {
         binding.emailField.setText("");
         binding.phoneField.setText("");
         binding.birthDateField.setText("");
+        binding.StartWorkDateField.setText("");
         binding.passwordField.setText("");
         binding.repeatPasswordField.setText("");
 
