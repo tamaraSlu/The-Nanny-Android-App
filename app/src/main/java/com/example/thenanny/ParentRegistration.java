@@ -1,6 +1,6 @@
 package com.example.thenanny;
 
-//import androidx.annotation.NonNull;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -16,11 +16,13 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.example.thenanny.databinding.ParentRegistrationFormBinding;
-//import com.google.android.gms.tasks.OnCompleteListener;
-//import com.google.android.gms.tasks.Task;
-//import com.google.firebase.auth.AuthResult;
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.storage.FirebaseStorage;
+import com.example.thenanny.dto.ParentDetails;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -31,14 +33,14 @@ import java.util.Objects;
 
 public class ParentRegistration extends AppCompatActivity {
     private ParentRegistrationFormBinding binding;
-//    private FirebaseStorage storage= FirebaseStorage.getInstance();
-//    private FirebaseAuth usersAuth;
+    private FirebaseStorage storage= FirebaseStorage.getInstance();
+    private FirebaseAuth usersAuth;
     final Calendar myCalendar = Calendar.getInstance();
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        usersAuth=FirebaseAuth.getInstance();
+        usersAuth=FirebaseAuth.getInstance();
         binding = ParentRegistrationFormBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -100,8 +102,7 @@ public class ParentRegistration extends AppCompatActivity {
                     binding.numOfChildrenField.setError("Number of children is incorrect");
                     Toast.makeText(getApplicationContext(), "Some fields are incorrect or missing", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_SHORT).show();
-//                    registerUser(email,password);
+                    registerUser(firstName,lastName,email,phone,password,address,Integer.parseInt(num_of_children));
 
                 }
         });
@@ -138,22 +139,39 @@ public class ParentRegistration extends AppCompatActivity {
     {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
-//    private void registerUser (String email,String password){
-//        usersAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(ParentRegistration.this, new OnCompleteListener<AuthResult>() {
-//            @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
-//                if(task.isSuccessful())
-//                {
-//                    Toast.makeText(ParentRegistration.this,"Registration Success",Toast.LENGTH_SHORT).show();
-//                    //TODO: insert here next screen
-////                    startActivity();
-//                }
-//                else{
-//                    Toast.makeText(ParentRegistration.this,"Error occurred in Registration. Please try again!",Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//    }
+    private void registerUser (String firstName,String lastName,String email,String phone,String password,String address,Integer num_of_children){
+        String f=firstName;
+        String l=lastName;
+        Integer n=num_of_children;
+
+        usersAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(ParentRegistration.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful())
+                {
+
+                    ParentDetails user=new ParentDetails(f, l,  email,  password,  phone, address, n);
+                    FirebaseDatabase.getInstance().getReference("Users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()) {
+                                        Toast.makeText(ParentRegistration.this,"Registration Success",Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(ParentRegistration.this, "Could not store to database.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                    //TODO: insert here next screen
+//                    startActivity();
+                }
+                else{
+                    Toast.makeText(ParentRegistration.this,"Error occurred in Registration. Please try again!",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
 
 }
