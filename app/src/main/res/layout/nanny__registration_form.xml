@@ -6,7 +6,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     tools:context=".NannyRegistration">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -254,12 +258,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-
-
-
-
-
-
-
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
