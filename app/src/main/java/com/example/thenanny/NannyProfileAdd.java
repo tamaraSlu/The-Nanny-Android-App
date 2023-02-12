@@ -29,6 +29,9 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.example.thenanny.dto.NannyDetails;
+import com.google.firebase.firestore.DocumentReference;
+
 import java.io.ByteArrayOutputStream;
 
 public class NannyProfileAdd extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
@@ -36,6 +39,7 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
     Button uploadIdBtn,submitButton ;
     ImageView profilePicture,editProfilePicture;
     String UserName;
+    NannyDetails nannyDetails;
     ProgressDialog progressDialog;
     private  static  final  int REQUEST_CAMERA = 200;
     private  static  final  int REQUEST_STORAGE = 300;
@@ -58,6 +62,7 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
             finish();
             System.exit(0);
         }
+        nannyDetails= (NannyDetails) getIntent().getSerializableExtra("userDetails");
         UserName = getIntent().getStringExtra("UserName");
         profilePicture=(ImageView) findViewById(R.id.profilePicture);
         //profilePicture.setOnTouchListener((View.OnTouchListener) this);

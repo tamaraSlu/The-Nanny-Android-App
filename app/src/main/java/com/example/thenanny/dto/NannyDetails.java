@@ -1,29 +1,36 @@
 package com.example.thenanny.dto;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
-public class NannyDetails extends UserDetails{
+public class NannyDetails implements UserDetails, Serializable {
     private Date birthDate;
-    private Date startWorkDate;
+    private String firstname, lastname, email, password, phone, address, startWorkYear;
     private Integer hourlyWage;
-    public NannyDetails(){
-        super();
 
+    public NannyDetails() {
     }
 
-    public NannyDetails(String firstname, String lastname, String email, String password, String phone,Integer hourlyWage,String address,Date birthDate, Date startWorkDate) {
-        super(firstname, lastname, email, password, phone,address);
+    public NannyDetails(String firstname, String lastname, String email, String password, String phone, Integer hourlyWage, String address, Date birthDate, String startWorkYear) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.address = address;
         this.birthDate = birthDate;
-        this.startWorkDate = startWorkDate;
+        this.startWorkYear = startWorkYear;
         this.hourlyWage = hourlyWage;
     }
 
-    public Date getStartWorkDate() {
-        return startWorkDate;
+    public String getStartWorkDate() {
+        return startWorkYear;
     }
 
-    public void setStartWorkDate(Date startWorkDate) {
-        this.startWorkDate = startWorkDate;
+    public void setStartWorkDate(String startWorkDate) {
+        this.startWorkYear = startWorkDate;
     }
 
     public Date getBirthDate() {
@@ -40,5 +47,59 @@ public class NannyDetails extends UserDetails{
 
     public void setHourlyWage(Integer hourlyWage) {
         this.hourlyWage = hourlyWage;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
+    public Map<String, Object> useDetailsToMap() {
+        ObjectMapper mapObject = new ObjectMapper();
+        return mapObject.convertValue(this, Map.class);
     }
 }
