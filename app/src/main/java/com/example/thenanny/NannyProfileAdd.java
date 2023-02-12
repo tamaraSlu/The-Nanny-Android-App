@@ -30,18 +30,27 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.example.thenanny.dto.NannyDetails;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
-public class NannyProfileAdd extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+public class NannyProfileAdd extends AppCompatActivity implements View.OnClickListener {
+    //View.OnTouchListener
     EditText cityField,agesField,wageField;
     Button uploadIdBtn,submitButton ;
     ImageView profilePicture,editProfilePicture;
     String UserName;
     NannyDetails nannyDetails;
     ProgressDialog progressDialog;
-    private  static  final  int REQUEST_CAMERA = 200;
+    private  static  final  int REQUEST_CAMERA = 100;
     private  static  final  int REQUEST_STORAGE = 300;
 
     private  static  final  int CAMERA = 1;
@@ -49,6 +58,7 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
 
 
     Uri uri;
+    StorageReference storageReference;
     Bitmap bitmap;
 
     @Override
@@ -72,6 +82,10 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         cityField=(EditText)findViewById(R.id.cityField);
 
 
+        editProfilePicture=findViewById(R.id.editProfilePicture);
+        editProfilePicture.setOnClickListener((View.OnClickListener) this);
+
+
         submitButton =(Button)findViewById(R.id.submitButton);
         submitButton.setOnClickListener((View.OnClickListener) this);
     }
@@ -83,8 +97,113 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         return (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
     }
+
     @Override
-    public boolean onTouch(View v, MotionEvent event)
+    public void onClick(View v)
+    {
+        if(v==submitButton)
+            Done();
+        else if(v==editProfilePicture)
+        {
+            selectImage();
+        }
+
+    }
+
+   private void selectImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,REQUEST_CAMERA);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CAMERA && data!=null && data.getData()!=null)
+        {
+            //bitmap = (Bitmap) data.getExtras().get("data");
+            //uri =  getImageUri (NannyProfileAdd.this ,bitmap);
+            uri=data.getData();
+            profilePicture.setImageURI(uri);
+        }
+
+        if (requestCode == REQUEST_STORAGE)
+        {
+            uri = data.getData();
+            profilePicture.setImageURI(uri);
+        }
+
+    }
+    public void Done()
+    {
+        if(cityField.getText().toString().isEmpty())
+        {
+            cityField.setError("Error,try again");
+            cityField.setText("");
+        }
+        else  if(agesField.getText().toString().isEmpty())
+        {
+            agesField.setError("Error,try again");
+            agesField.setText("");
+        }
+        else if(wageField.getText().toString().equals(""))
+        {
+            wageField.setError("Error,try again");
+            wageField.setText("");
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(), "Everything is fine", Toast.LENGTH_SHORT).show();
+
+            //progressDialog.show();
+            // PotInFirebase();
+            UploadImage();
+        }
+    }
+
+    private void UploadImage() {
+        progressDialog=new ProgressDialog(this);
+        progressDialog.setTitle("Uploading file...");
+        progressDialog.show();
+
+        SimpleDateFormat formatter=new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
+        Date now=new Date();
+        String fileName=formatter.format(now);
+
+        storageReference= FirebaseStorage.getInstance().getReference("images/"+fileName);
+        storageReference.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        //profilePicture.setImageURI(null);
+                        Toast.makeText(NannyProfileAdd.this,"Successfully Uploaded profile photo",Toast.LENGTH_SHORT).show();
+                        if(progressDialog.isShowing())
+                            progressDialog.dismiss();
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if(progressDialog.isShowing())
+                            progressDialog.dismiss();
+                        Toast.makeText(NannyProfileAdd.this,"Profile photo uploading failure",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
+
+
+
+
+
+
+
+    // unrelevant for now
+
+    // @Override
+/*    public boolean onTouch(View v, MotionEvent event)
     {
         if(v==profilePicture)
         {
@@ -121,40 +240,6 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         return false;
 
     }
-    @Override
-    public void onClick(View v)
-    {
-        if(v==submitButton)
-            Done();
-    }
-    public void Done()
-    {
-        if(cityField.getText().toString().isEmpty())
-        {
-            cityField.setError("Error,try again");
-            cityField.setText("");
-        }
-        else  if(agesField.getText().toString().isEmpty())
-        {
-            agesField.setError("Error,try again");
-            agesField.setText("");
-        }
-        else if(wageField.getText().toString().equals(""))
-        {
-            wageField.setError("Error,try again");
-            wageField.setText("");
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Everything is fine", Toast.LENGTH_SHORT).show();
-
-            progressDialog.show();
-            // PotInFirebase();
-        }
-    }
-
-
-
     public void requestPermission(int permission)
     {
         if(permission == CAMERA)
@@ -169,23 +254,7 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         }
 
     }
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CAMERA)
-        {
-            bitmap = (Bitmap) data.getExtras().get("data");
-            uri =  getImageUri (NannyProfileAdd.this ,bitmap);
-            profilePicture.setImageURI(uri);
-        }
 
-        if (requestCode == REQUEST_STORAGE)
-        {
-            uri = data.getData();
-            profilePicture.setImageURI(uri);
-        }
-
-    }
     public Uri getImageUri(Context inContext, Bitmap inImage)
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -220,6 +289,6 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
             else
                 Toast.makeText(this, "You Do not have storage permission", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
 }
