@@ -24,5 +24,13 @@
     <string name="no">No</string>
     <string name="submit">Submit</string>
     <string name="next">Next</string>
+    <string name="sign_in">Sign in</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="or_sign_up_as">Or Sign Up As</string>
+    <string name="parent">Parent</string>
+    <string name="babysitter">Babysitter</string>
+    <string name="forgot_your_password">Forgot your password?</string>
+    <string name="please_enter_the_email_you_use_to_sign_in">Please enter the email you use to sign in</string>
+    <string name="reset_password">Reset Password</string>
 
 </resources>

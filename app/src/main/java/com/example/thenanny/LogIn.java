@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class LogIn extends AppCompatActivity {
     Button signInBtn;
-
+    Button forgotPasswordBtn;
     Button signUpParentBtn;
     Button signUpBabysitterBtn;
     @SuppressLint("MissingInflatedId")
@@ -30,21 +30,14 @@ public class LogIn extends AppCompatActivity {
             finish();
             System.exit(0);
         }
-        signUpParentBtn= (Button) findViewById(R.id.signUpParentBtn);
 
-        signUpParentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LogIn.this, ParentRegistration.class));
-            }
-        });
-        signUpBabysitterBtn= (Button) findViewById(R.id.signUpBabysitterBtn);
-        signUpBabysitterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LogIn.this, NannyRegistration.class));
-            }
-        });
+        forgotPasswordBtn= findViewById(R.id.forgotPassBtn);
+        forgotPasswordBtn.setOnClickListener(v -> startActivity(new Intent(LogIn.this, ForgotPasswordActivity.class)));
+
+        signUpParentBtn= findViewById(R.id.signUpParentBtn);
+        signUpParentBtn.setOnClickListener(v -> startActivity(new Intent(LogIn.this, ParentRegistration.class)));
+        signUpBabysitterBtn= findViewById(R.id.signUpBabysitterBtn);
+        signUpBabysitterBtn.setOnClickListener(v -> startActivity(new Intent(LogIn.this, NannyRegistration.class)));
 
 
     }

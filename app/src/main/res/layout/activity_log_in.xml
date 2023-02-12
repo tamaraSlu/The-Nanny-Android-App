@@ -45,7 +45,7 @@
             android:textSize="40sp"
             android:textColor="#927E96"
 
-            android:text="Sign in"
+            android:text="@string/sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -54,7 +54,7 @@
             android:textColorHint="#8D7A91"
             android:paddingStart="10dp"
             android:paddingLeft="10dp"
-            android:hint="Email"
+            android:hint="@string/email"
             android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
@@ -63,15 +63,16 @@
         <EditText
             android:textColor="@color/black"
             android:textColorHint="#8D7A91"
-            android:paddingStart="10dp"
+            android:paddingRight="10dp"
             android:paddingLeft="10dp"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:layout_margin="20dp"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="@drawable/rounded_corner"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/signInBtn"
@@ -80,14 +81,16 @@
             android:backgroundTint="@color/lilac"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="sign in"
+            android:text="@string/sign_in"
             android:textColor="#fff" />
-        <TextView
-            android:layout_marginTop="7dp"
-            android:textColor="#fff"
-            android:text="Forgot Password?"
+
+        <Button
+            android:id="@+id/forgotPassBtn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="@string/forgot_password"
+            android:textSize="15sp"/>
 
 
         <TextView
@@ -97,7 +100,7 @@
             android:layout_marginBottom="20dp"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="Or Sign Up As" />
+            android:text="@string/or_sign_up_as" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -108,7 +111,7 @@
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="Parent"
+                android:text="@string/parent"
                 android:backgroundTint="@color/login_bgnd"
                 android:textColor="#fff"/>
             <Button
@@ -116,7 +119,7 @@
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="Babysitter"
+                android:text="@string/babysitter"
                 android:backgroundTint="@color/login_bgnd"
                 android:textColor="#fff"/>
         </LinearLayout>
