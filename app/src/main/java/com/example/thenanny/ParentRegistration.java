@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 public class ParentRegistration extends AppCompatActivity {
@@ -49,6 +50,7 @@ public class ParentRegistration extends AppCompatActivity {
                 String repeatPassword = Objects.requireNonNull(binding.repeatPasswordField.getText()).toString().trim();
                 String address = Objects.requireNonNull(binding.addressField.getText()).toString().trim();
                 String num_of_children = Objects.requireNonNull(binding.numOfChildrenField.getText()).toString().trim();
+                List<Float> ageRange=binding.ageSliderField.getValues();
                 //First name error
                 if (firstName.equals("")) {
                     binding.firstNameField.setError("Enter your first name");
@@ -95,7 +97,7 @@ public class ParentRegistration extends AppCompatActivity {
                     binding.numOfChildrenField.setError("Number of children is incorrect");
                     Toast.makeText(getApplicationContext(), "Some fields are incorrect or missing", Toast.LENGTH_SHORT).show();
                 } else {
-                    registerUser(firstName,lastName,email,phone,password,address,Integer.parseInt(num_of_children));
+                    registerUser(firstName,lastName,email,phone,password,address,Integer.parseInt(num_of_children),Math.round(ageRange.get(0)),Math.round(ageRange.get(1)));
 
                 }
         });
@@ -114,31 +116,28 @@ public class ParentRegistration extends AppCompatActivity {
         binding.repeatPasswordField.setText("");
         binding.addressField.setText("");
         binding.numOfChildrenField.setText("");
+        binding.ageSliderField.setValues(0f,18f);
 
 
     }
 
     public int getAge(int year, int month, int dayOfMonth)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            return Period.between(LocalDate.of(year, month, dayOfMonth),
-                    LocalDate.now()).getYears();
-        }
-        return -1;
+        return Period.between(LocalDate.of(year, month, dayOfMonth),
+                LocalDate.now()).getYears();
     }
 
     boolean isEmailValid(CharSequence email)
     {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
-    private void registerUser (String firstName,String lastName,String email,String phone,String password,String address,Integer num_of_children){
+    private void registerUser (String firstName,String lastName,String email,String phone,String password,String address,Integer num_of_children,Integer minAge,Integer maxAge){
 
         usersAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(ParentRegistration.this, task -> {
             if(task.isSuccessful())
             {
-                DocumentReference document= storage.collection("users").document(usersAuth.getCurrentUser().getUid());
-                ParentDetails parent= new ParentDetails(firstName,lastName,email,password,phone,address,num_of_children);
+                DocumentReference document= storage.collection("users.parents").document(usersAuth.getCurrentUser().getUid());
+                ParentDetails parent= new ParentDetails(firstName,lastName,email,password,phone,address,num_of_children,minAge,maxAge);
                 document.set(parent.useDetailsToMap()).addOnSuccessListener(unused -> Toast.makeText(ParentRegistration.this,"User's profile created successfully",Toast.LENGTH_LONG).show());
                 //TODO: insert here next screen
 //                    startActivity();
