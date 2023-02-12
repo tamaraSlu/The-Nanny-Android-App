@@ -5,31 +5,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 public class ParentDetails implements UserDetails {
-    private Integer numOfChildrenField;
+    private Integer numOfChildren,minAge,maxAge;
     private String firstname, lastname, email, password, phone, address;
 
 
     public ParentDetails() {
-        super();
-
     }
 
-    public ParentDetails(String firstname, String lastname, String email, String password, String phone, String address, Integer numOfChildrenField) {
+    public ParentDetails(String firstname, String lastname, String email, String password, String phone, String address, Integer numOfChildren,Integer minAge,Integer maxAge) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
-        this.numOfChildrenField = numOfChildrenField;
+        this.numOfChildren = numOfChildren;
+        this.minAge=minAge;
+        this.maxAge=maxAge;
     }
 
     public Integer getNumOfChildrenField() {
-        return numOfChildrenField;
+        return numOfChildren;
     }
 
     public void setNumOfChildrenField(Integer numOfChildrenField) {
-        this.numOfChildrenField = numOfChildrenField;
+        this.numOfChildren = numOfChildrenField;
     }
 
     public String getFirstname() {
@@ -85,4 +85,19 @@ public class ParentDetails implements UserDetails {
         return mapObject.convertValue(this, Map.class);
     }
 
+    public Integer getMinAge() {
+        return minAge;
+    }
+
+    public void setMinAge(Integer minAge) {
+        this.minAge = minAge;
+    }
+
+    public Integer getMaxAge() {
+        return maxAge;
+    }
+
+    public void setMaxAge(Integer maxAge) {
+        this.maxAge = maxAge;
+    }
 }
