@@ -116,7 +116,7 @@ public class ParentRegistration extends AppCompatActivity {
         binding.repeatPasswordField.setText("");
         binding.addressField.setText("");
         binding.numOfChildrenField.setText("");
-        binding.ageSliderField.setValues();
+        binding.ageSliderField.setValues(0f,18f);
 
 
     }
