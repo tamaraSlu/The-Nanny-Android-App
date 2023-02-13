@@ -37,12 +37,12 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
     String userID;
     NannyDetails nannyDetails;
     ProgressDialog progressDialog;
-    private  static  final  int REQUEST_CAMERA = 100;
-    private  static  final  int REQUEST_STORAGE = 300;
-
-    Uri uri;
+    private  static  final  int PICKIMAGE_REQUEST = 100;
+    private  static  final  int PICKFILE_REQUEST = 300;
+    Uri imageUri;
+    Uri fileUri;
     StorageReference storageReference;
-    Bitmap bitmap;
+   // Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +70,8 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         editProfilePicture=findViewById(R.id.editProfilePicture);
         editProfilePicture.setOnClickListener((View.OnClickListener) this);
 
+        uploadIdBtn=(Button)findViewById(R.id.uploadIdBtn);
+        uploadIdBtn.setOnClickListener((View.OnClickListener) this);
 
         submitButton =(Button)findViewById(R.id.submitButton);
         submitButton.setOnClickListener((View.OnClickListener) this);
@@ -89,34 +91,39 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         if(v==submitButton)
             Done();
         else if(v==editProfilePicture)
-        {
             selectImage();
-        }
+
+        else if(v==uploadIdBtn)
+            selectFile();
 
     }
 
-   private void selectImage() {
+    private void selectFile() {
+        Intent intent = new Intent();
+        intent.setType("*/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,PICKFILE_REQUEST);
+    }
+
+    private void selectImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,REQUEST_CAMERA);
+        startActivityForResult(intent,PICKIMAGE_REQUEST);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CAMERA && data!=null && data.getData()!=null)
+        if (requestCode == PICKIMAGE_REQUEST && data!=null && data.getData()!=null)
         {
-            //bitmap = (Bitmap) data.getExtras().get("data");
-            //uri =  getImageUri (NannyProfileAdd.this ,bitmap);
-            uri=data.getData();
-            profilePicture.setImageURI(uri);
+            imageUri=data.getData();
+            profilePicture.setImageURI(imageUri);
         }
 
-        if (requestCode == REQUEST_STORAGE)
+        if (requestCode == PICKFILE_REQUEST && data!=null && data.getData()!=null)
         {
-            uri = data.getData();
-            profilePicture.setImageURI(uri);
+            fileUri = data.getData();
         }
 
     }
@@ -139,9 +146,9 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "Everything is fine", Toast.LENGTH_SHORT).show();
-
+            //Toast.makeText(getApplicationContext(), "Everything is fine", Toast.LENGTH_SHORT).show();
             UploadImage();
+            UploadID();
         }
     }
 
@@ -150,40 +157,62 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         progressDialog.setTitle("Uploading file...");
         progressDialog.show();
 
-        SimpleDateFormat formatter=new SimpleDateFormat("profile_image", Locale.US);
-        Date now=new Date();
-        String fileName=formatter.format(now);
+        String fileName="profile_image";
 
-        storageReference= FirebaseStorage.getInstance().getReference("images/"+userID+fileName);
-        storageReference.putFile(uri)
+        storageReference= FirebaseStorage.getInstance().getReference("nanny_files/"+userID+"/"+fileName);
+        storageReference.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                         //profilePicture.setImageURI(null);
                         Toast.makeText(NannyProfileAdd.this,"Successfully Uploaded profile photo",Toast.LENGTH_SHORT).show();
-                        if(progressDialog.isShowing())
-                            progressDialog.dismiss();
+
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        if(progressDialog.isShowing())
-                            progressDialog.dismiss();
+
                         Toast.makeText(NannyProfileAdd.this,"Profile photo uploading failure",Toast.LENGTH_SHORT).show();
 
                     }
                 });
+        if(progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+    private void UploadID() {
+        progressDialog=new ProgressDialog(this);
+        progressDialog.setTitle("Uploading file...");
+        progressDialog.show();
+
+        String fileName="id";
+        storageReference= FirebaseStorage.getInstance().getReference("nanny_files/"+userID+"/"+fileName);
+        storageReference.putFile(fileUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        //profilePicture.setImageURI(null);
+                        Toast.makeText(NannyProfileAdd.this,"Successfully Uploaded id file",Toast.LENGTH_SHORT).show();
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(NannyProfileAdd.this,"ID uploading failure",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+        if(progressDialog.isShowing())
+            progressDialog.dismiss();
+
     }
 
 
 
 
 
-
-
-    // unrelevant for now
+    // irrelevant for now
 
     // @Override
 /*    public boolean onTouch(View v, MotionEvent event)
