@@ -2,9 +2,10 @@ package com.example.thenanny.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class ParentDetails implements UserDetails {
+public class ParentDetails implements UserDetails, Serializable {
     private Integer numOfChildren,minAge,maxAge;
     private String firstname, lastname, email, password, phone, address;
 

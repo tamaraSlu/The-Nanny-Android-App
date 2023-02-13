@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class NannyDetails implements UserDetails, Serializable {
     private Date birthDate;
-    private String firstname, lastname, email, password, phone, address, startWorkYear;
+    private String id,firstname, lastname, email, password, phone, address, startWorkYear;
     private Integer hourlyWage,minAge,maxAge;
     private Boolean isApproved;
 
@@ -27,6 +27,7 @@ public class NannyDetails implements UserDetails, Serializable {
         this.minAge=minAge;
         this.maxAge=maxAge;
         this.isApproved=false;
+        this.id="";
     }
 
     @NonNull
@@ -145,5 +146,13 @@ public class NannyDetails implements UserDetails, Serializable {
 
     public void setMaxAge(Integer maxAge) {
         this.maxAge = maxAge;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

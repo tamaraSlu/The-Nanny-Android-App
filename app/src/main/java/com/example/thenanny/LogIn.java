@@ -87,7 +87,11 @@ public class LogIn extends AppCompatActivity {
                                     ParentDetails parent = taskParent.getResult().toObject(ParentDetails.class);
                                     Log.i("",parent.toString());
                                     //homepage for parents
-//                                    startActivity(new Intent(LogIn.this, HomePage.class));
+                                    Intent intent=new Intent(LogIn.this, ParentsActivity.class);
+                                    intent.putExtra("userId",userId);
+                                    intent.putExtra("userDetails",parent);
+                                    startActivity(intent);
+
                                 } else {
                                     DocumentReference documentReference1 = storage.collection("users.nanny").document(userId);
                                     documentReference1.get().addOnCompleteListener(task1 -> {
