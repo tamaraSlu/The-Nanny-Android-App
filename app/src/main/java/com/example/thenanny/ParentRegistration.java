@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -139,8 +140,11 @@ public class ParentRegistration extends AppCompatActivity {
                 DocumentReference document= storage.collection("users.parents").document(usersAuth.getCurrentUser().getUid());
                 ParentDetails parent= new ParentDetails(firstName,lastName,email,password,phone,address,num_of_children,minAge,maxAge);
                 document.set(parent.useDetailsToMap()).addOnSuccessListener(unused -> Toast.makeText(ParentRegistration.this,"User's profile created successfully",Toast.LENGTH_LONG).show());
-                //TODO: insert here next screen
-//                    startActivity();
+                //homepage for parents
+                Intent intent=new Intent(ParentRegistration.this, ParentsActivity.class);
+                intent.putExtra("userId",usersAuth.getCurrentUser().getUid());
+                intent.putExtra("userDetails",parent);
+                startActivity(intent);
             }
             else{
                 Toast.makeText(ParentRegistration.this,"Error occurred in Registration. Please try again!",Toast.LENGTH_SHORT).show();
