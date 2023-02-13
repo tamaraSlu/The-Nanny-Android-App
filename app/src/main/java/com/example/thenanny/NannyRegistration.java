@@ -37,6 +37,7 @@ public class NannyRegistration extends AppCompatActivity {
     private NannyRegistrationFormBinding binding;
     private final FirebaseFirestore storage= FirebaseFirestore.getInstance();
     private FirebaseAuth usersAuth;
+
     final Calendar myCalendar = Calendar.getInstance();
     @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
     @Override
@@ -205,6 +206,9 @@ public class NannyRegistration extends AppCompatActivity {
                 NannyDetails nanny= new NannyDetails(firstName,lastName, email, password,phone,hourlyWage,address,birthDate, startWorkDate);
                 Intent intent=new Intent(NannyRegistration.this, NannyProfileAdd.class);
                 intent.putExtra("userDetails",nanny);
+                intent.putExtra("userId",FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
                 startActivity(intent);
             }
             else{

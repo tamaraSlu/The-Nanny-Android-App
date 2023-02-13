@@ -2,42 +2,28 @@ package com.example.thenanny;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
-import android.app.Activity;
-
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.app.ProgressDialog;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.example.thenanny.dto.NannyDetails;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -48,14 +34,11 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
     Button uploadIdBtn,submitButton ;
     ImageView profilePicture,editProfilePicture;
     String UserName;
+    String userID;
     NannyDetails nannyDetails;
     ProgressDialog progressDialog;
     private  static  final  int REQUEST_CAMERA = 100;
     private  static  final  int REQUEST_STORAGE = 300;
-
-    private  static  final  int CAMERA = 1;
-    private  static  final  int STORAGE = 2;
-
 
     Uri uri;
     StorageReference storageReference;
@@ -72,6 +55,8 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
             finish();
             System.exit(0);
         }
+
+        userID= getIntent().getStringExtra("userId");
         nannyDetails= (NannyDetails) getIntent().getSerializableExtra("userDetails");
         UserName = getIntent().getStringExtra("UserName");
         profilePicture=(ImageView) findViewById(R.id.profilePicture);
@@ -156,8 +141,6 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         {
             Toast.makeText(getApplicationContext(), "Everything is fine", Toast.LENGTH_SHORT).show();
 
-            //progressDialog.show();
-            // PotInFirebase();
             UploadImage();
         }
     }
@@ -167,11 +150,11 @@ public class NannyProfileAdd extends AppCompatActivity implements View.OnClickLi
         progressDialog.setTitle("Uploading file...");
         progressDialog.show();
 
-        SimpleDateFormat formatter=new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US);
+        SimpleDateFormat formatter=new SimpleDateFormat("profile_image", Locale.US);
         Date now=new Date();
         String fileName=formatter.format(now);
 
-        storageReference= FirebaseStorage.getInstance().getReference("images/"+fileName);
+        storageReference= FirebaseStorage.getInstance().getReference("images/"+userID+fileName);
         storageReference.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
