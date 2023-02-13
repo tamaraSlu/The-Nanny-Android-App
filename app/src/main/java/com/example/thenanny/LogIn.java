@@ -75,9 +75,9 @@ public class LogIn extends AppCompatActivity {
                     userId=user.getUid();
                     if(user.getUid().equals("mJEmizP3LKRyH9Pig0J48pEO91q2"))
                     {
-                        Toast.makeText(getApplicationContext(), "YOU ARE ADMIN!", Toast.LENGTH_LONG).show();
-                        //homepage for admin
-//                        startActivity(new Intent(LogIn.this, HomePage.class));
+                        //Toast.makeText(getApplicationContext(), "YOU ARE ADMIN!", Toast.LENGTH_LONG).show();
+                        //go to homepage for admin
+                        startActivity(new Intent(LogIn.this,AdminHomePage.class));
                     }
                     else{
                         DocumentReference documentReference= storage.collection("users.parents").document(userId);

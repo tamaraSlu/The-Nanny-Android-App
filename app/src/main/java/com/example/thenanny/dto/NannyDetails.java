@@ -33,6 +33,7 @@ public class NannyDetails implements UserDetails, Serializable {
         this.profile_image=null;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "NannyDetails{" +

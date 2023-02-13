@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import com.example.thenanny.dto.NannyDetails;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     Context context;
-    ArrayList<Nanny> nannyArrayList;
+    ArrayList<NannyDetails> nannyArrayList;
 
-    public Adapter(Context context, ArrayList<Nanny> nannyArrayList) {
+    public Adapter(Context context, ArrayList<NannyDetails> nannyArrayList) {
         this.context = context;
         this.nannyArrayList = nannyArrayList;
     }
@@ -29,10 +29,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Nanny nanny=nannyArrayList.get(position);
-        String fullName=(nanny.firstname+" "+nanny.lastname);
+        NannyDetails nanny=nannyArrayList.get(position);
+        String fullName=(nanny.getFirstname()+" "+nanny.getLastname());
         holder.item_title.setText(fullName);
-        holder.item_subtitle.setText(nanny.ID);
+        holder.item_subtitle.setText(nanny.getId());
 
     }
 
