@@ -49,7 +49,7 @@ public class LogIn extends AppCompatActivity {
         forgotPasswordBtn.setOnClickListener(v -> startActivity(new Intent(LogIn.this, ForgotPasswordActivity.class)));
 
         signInBtn=findViewById(R.id.signInBtn);
-        signInBtn.setOnClickListener(v->signIn() );
+        signInBtn.setOnClickListener(v->signIn());
 
         signUpParentBtn= findViewById(R.id.signUpParentBtn);
         signUpParentBtn.setOnClickListener(v -> startActivity(new Intent(LogIn.this, ParentRegistration.class)));
@@ -73,27 +73,39 @@ public class LogIn extends AppCompatActivity {
                 storage= FirebaseFirestore.getInstance();
                 if (user != null) {
                     userId=user.getUid();
-                    DocumentReference documentReference= storage.collection("users.parents").document(userId);
-                    documentReference.get().addOnCompleteListener(taskParent -> {
-                        if (taskParent.isSuccessful()) {
-                            if (taskParent.getResult().exists()) {
-                                ParentDetails parent = taskParent.getResult().toObject(ParentDetails.class);
-                                Log.i("",parent.toString());
-                            } else {
-                                DocumentReference documentReference1 = storage.collection("users.nanny").document(userId);
-                                documentReference1.get().addOnCompleteListener(task1 -> {
-                                    if (task1.isSuccessful()) {
-                                        if (task1.getResult().exists()) {
-                                            NannyDetails nanny = task1.getResult().toObject(NannyDetails.class);
-                                            Log.i("",nanny.toString());
+                    if(user.getUid().equals("mJEmizP3LKRyH9Pig0J48pEO91q2"))
+                    {
+                        Toast.makeText(getApplicationContext(), "YOU ARE ADMIN!", Toast.LENGTH_LONG).show();
+                        //homepage for admin
+//                        startActivity(new Intent(LogIn.this, HomePage.class));
+                    }
+                    else{
+                        DocumentReference documentReference= storage.collection("users.parents").document(userId);
+                        documentReference.get().addOnCompleteListener(taskParent -> {
+                            if (taskParent.isSuccessful()) {
+                                if (taskParent.getResult().exists()) {
+                                    ParentDetails parent = taskParent.getResult().toObject(ParentDetails.class);
+                                    Log.i("",parent.toString());
+                                    //homepage for parents
+//                                    startActivity(new Intent(LogIn.this, HomePage.class));
+                                } else {
+                                    DocumentReference documentReference1 = storage.collection("users.nanny").document(userId);
+                                    documentReference1.get().addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            if (task1.getResult().exists()) {
+                                                NannyDetails nanny = task1.getResult().toObject(NannyDetails.class);
+                                                Log.i("",nanny.toString());
+                                                //homepage for nanny
+//                                               startActivity(new Intent(LogIn.this, HomePage.class));
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+
                 }
-//                startActivity(new Intent(LogIn.this, HomePage.class));
             }else{
                 Toast.makeText(getApplicationContext(),"Error occurred:"+Objects.requireNonNull(task.getException()) , Toast.LENGTH_LONG).show();
                 finish();
