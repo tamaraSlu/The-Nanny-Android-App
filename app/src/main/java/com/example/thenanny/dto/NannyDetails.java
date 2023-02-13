@@ -1,5 +1,5 @@
 package com.example.thenanny.dto;
-
+import androidx.annotation.NonNull;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Serializable;
 import java.util.Date;
@@ -8,12 +8,13 @@ import java.util.Map;
 public class NannyDetails implements UserDetails, Serializable {
     private Date birthDate;
     private String firstname, lastname, email, password, phone, address, startWorkYear;
-    private Integer hourlyWage;
+    private Integer hourlyWage,minAge,maxAge;
+    private Boolean isApproved;
 
     public NannyDetails() {
     }
 
-    public NannyDetails(String firstname, String lastname, String email, String password, String phone, Integer hourlyWage, String address, Date birthDate, String startWorkYear) {
+    public NannyDetails(String firstname, String lastname, String email, String password, String phone, Integer hourlyWage, String address, Date birthDate, String startWorkYear,Integer minAge,Integer maxAge) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -23,8 +24,12 @@ public class NannyDetails implements UserDetails, Serializable {
         this.birthDate = birthDate;
         this.startWorkYear = startWorkYear;
         this.hourlyWage = hourlyWage;
+        this.minAge=minAge;
+        this.maxAge=maxAge;
+        this.isApproved=false;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "NannyDetails{" +
@@ -116,5 +121,29 @@ public class NannyDetails implements UserDetails, Serializable {
     public Map<String, Object> useDetailsToMap() {
         ObjectMapper mapObject = new ObjectMapper();
         return mapObject.convertValue(this, Map.class);
+    }
+
+    public Boolean getApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(Boolean approved) {
+        isApproved = approved;
+    }
+
+    public Integer getMinAge() {
+        return minAge;
+    }
+
+    public void setMinAge(Integer minAge) {
+        this.minAge = minAge;
+    }
+
+    public Integer getMaxAge() {
+        return maxAge;
+    }
+
+    public void setMaxAge(Integer maxAge) {
+        this.maxAge = maxAge;
     }
 }

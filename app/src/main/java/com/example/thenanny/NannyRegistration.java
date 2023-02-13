@@ -152,7 +152,7 @@ public class NannyRegistration extends AppCompatActivity {
                 String myFormat="dd/MM/yyyy";
                 SimpleDateFormat dateFormat=new SimpleDateFormat(myFormat, Locale.US);
                 try {
-                    registerUser(firstName,lastName,email,phone,password,null,null,dateFormat.parse(date_of_birth),start_work_year);
+                    registerUser(firstName,lastName,email,phone,password,null,null,dateFormat.parse(date_of_birth),start_work_year,null,null);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -175,9 +175,6 @@ public class NannyRegistration extends AppCompatActivity {
         binding.StartWorkYearField.setText("");
         binding.passwordField.setText("");
         binding.repeatPasswordField.setText("");
-
-
-
     }
 
     public int getAge(int year, int month, int dayOfMonth)
@@ -198,12 +195,12 @@ public class NannyRegistration extends AppCompatActivity {
         binding.birthDateField.setError(null);
     }
 
-    private void registerUser (String firstName, String lastName, String email, String phone, String password, String address, Integer hourlyWage, Date birthDate, String startWorkDate){
+    private void registerUser (String firstName, String lastName, String email, String phone, String password, String address, Integer hourlyWage, Date birthDate, String startWorkDate,Integer minAge,Integer maxAge){
 
         usersAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(NannyRegistration.this, task -> {
             if(task.isSuccessful())
             {
-                NannyDetails nanny= new NannyDetails(firstName,lastName, email, password,phone,hourlyWage,address,birthDate, startWorkDate);
+                NannyDetails nanny= new NannyDetails(firstName,lastName, email, password,phone,hourlyWage,address,birthDate, startWorkDate,minAge,maxAge);
                 Intent intent=new Intent(NannyRegistration.this, NannyProfileAdd.class);
                 intent.putExtra("userDetails",nanny);
                 intent.putExtra("userId",FirebaseAuth.getInstance().getCurrentUser().getUid());

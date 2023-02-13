@@ -32,5 +32,9 @@
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="please_enter_the_email_you_use_to_sign_in">Please enter the email you use to sign in</string>
     <string name="reset_password">Reset Password</string>
+    <string name="children_age_range">Children Age range:</string>
+    <string name="upload_id_file_to_verify_your_identity">Upload ID file to verify your identity</string>
+    <string name="chose_file">chose file</string>
+    <string name="profile_photo">Profile Photo</string>
 
 </resources>
