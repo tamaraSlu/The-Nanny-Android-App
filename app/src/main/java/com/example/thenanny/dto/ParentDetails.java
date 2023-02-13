@@ -24,6 +24,21 @@ public class ParentDetails implements UserDetails {
         this.maxAge=maxAge;
     }
 
+    @Override
+    public String toString() {
+        return "ParentDetails{" +
+                "numOfChildren=" + numOfChildren +
+                ", minAge=" + minAge +
+                ", maxAge=" + maxAge +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
+
     public Integer getNumOfChildrenField() {
         return numOfChildren;
     }

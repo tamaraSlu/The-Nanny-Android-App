@@ -25,6 +25,21 @@ public class NannyDetails implements UserDetails, Serializable {
         this.hourlyWage = hourlyWage;
     }
 
+    @Override
+    public String toString() {
+        return "NannyDetails{" +
+                "birthDate=" + birthDate +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", startWorkYear='" + startWorkYear + '\'' +
+                ", hourlyWage=" + hourlyWage +
+                '}';
+    }
+
     public String getStartWorkDate() {
         return startWorkYear;
     }
