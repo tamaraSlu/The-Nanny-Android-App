@@ -30,6 +30,11 @@ public class NannyDetails implements UserDetails, Serializable {
         this.id="";
     }
 
+    public NannyDetails(String firstname, String lastname, String id) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.id = id;
+    }
     @NonNull
     @Override
     public String toString() {

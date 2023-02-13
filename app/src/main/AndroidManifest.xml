@@ -27,6 +27,9 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".AdminHomePage"
+            android:exported="false" />
+        <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false">
             <meta-data
