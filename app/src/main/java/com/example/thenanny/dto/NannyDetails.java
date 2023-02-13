@@ -2,6 +2,7 @@ package com.example.thenanny.dto;
 import androidx.annotation.NonNull;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ public class NannyDetails implements UserDetails, Serializable {
     private String id,firstname, lastname, email, password, phone, address, startWorkYear;
     private Integer hourlyWage,minAge,maxAge;
     private Boolean isApproved;
+    private byte[] profile_image;
 
     public NannyDetails() {
     }
@@ -28,13 +30,14 @@ public class NannyDetails implements UserDetails, Serializable {
         this.maxAge=maxAge;
         this.isApproved=false;
         this.id="";
+        this.profile_image=null;
     }
 
-    @NonNull
     @Override
     public String toString() {
         return "NannyDetails{" +
                 "birthDate=" + birthDate +
+                ", id='" + id + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
@@ -43,6 +46,10 @@ public class NannyDetails implements UserDetails, Serializable {
                 ", address='" + address + '\'' +
                 ", startWorkYear='" + startWorkYear + '\'' +
                 ", hourlyWage=" + hourlyWage +
+                ", minAge=" + minAge +
+                ", maxAge=" + maxAge +
+                ", isApproved=" + isApproved +
+                ", profile_image=" + Arrays.toString(profile_image) +
                 '}';
     }
 
@@ -154,5 +161,13 @@ public class NannyDetails implements UserDetails, Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public byte[] getProfile_image() {
+        return profile_image;
+    }
+
+    public void setProfile_image(byte[] profile_image) {
+        this.profile_image = profile_image;
     }
 }
